@@ -15,6 +15,7 @@
   - [ ] Load raw text (5–10 technical paragraphs — hardcoded dataset or `.txt` file)
   - [ ] Chunk the text (fixed-size with overlap, e.g. 256 tokens / 50 overlap — **document this choice**)
   - [ ] Return clean `List[Document]` with metadata (`chunk_id`, `source`)
+  - [ ] Have a incremental loader in place
 
 ---
 
