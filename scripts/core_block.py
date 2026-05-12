@@ -15,8 +15,7 @@ MODEL_MAP = {
 
 MANIFEST_FILE = "ingest_manifest.json"  # tracks which docs have been ingested
 
-
-class init_core_dependancies:
+class CoreDependancies:
     def __init__(
         self,
         llm_model: Literal["llama", "qwen", "deepseek"],
@@ -158,3 +157,8 @@ class init_core_dependancies:
         manifest_path = Path(self.db_location) / MANIFEST_FILE
         with open(manifest_path, "w") as f:
             json.dump(self.manifest, f, indent=2)
+
+if __name__ == "__main__":
+    init_main = CoreDependancies(llm_model="deepseek", vdb="chromadb", db_location="", ingest_data=True, use_stub_llm=False)
+
+    
