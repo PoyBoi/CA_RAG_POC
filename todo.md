@@ -1,49 +1,119 @@
-Deliverables:
-- [ ] Local LLM Model
-- [ ] RAG
-    - [ ] Ingestion pipeline for raw data
-        - [ ] Make a Class that handles the ingestion (do the things below)
-        - Optional:
-            - [ ] Cleaning that data up
-            - [ ] Formatting that data
-            - [ ] Doing basic "data" analysis on the dataset
-    - [ ] Generate Embeddings
-        - use `sentence-transformers` (or any other local library) to emulate `vertexAI`'s local embedding model's behaviour
-    - [ ] VdB
-        - `FAISS` / `ChromaDB` (prefer ChromaDB)
-        - Optional:
-            - [ ] Optimise the VdB
-    - [ ] Mocking
-        - Mock the `vertexai.language_models.TextEmbeddingModel` and `GenerativeModel` for the query expansion phase.
-    - [ ] Retrieval
-        - [ ] Raw Vector Search
-            - Traditional embedding-based similarity search
-            - Optional:
-                - [ ] Use ensemble retreiver also as an option
-                    - BM25, sematic, vector
-        - [ ] AI-Enhanced Retrieval
-            - Using a (mocked) model to rewrite/expand the user query into a better embedding-friendly format before searching
-            - Optional:
-                - [ ] `QueryReWriter` Class
-                - [ ] Use a agent based `query re-writer` OR a small trained & fine-tuned model that trims down sentences based on their importance, basically a `transformer-based_sentence-trimmer`
-    - [ ] Productivisation:
-        - Check out:
-            - scaling
-            - edge-cases
-            - token management
-            - log inference timing (eval and observability)
-            - guard-rails
+# Senior GenAI Assessment — RAG Pipeline Todos
 
-- [ ] Submission:
-    - [ ] `Pytest Suite` (mocking the GCP SDK)
-    - [ ] A `retrieval_benchmark.md` file inside the repo showing the output of the "Strategy A vs Strategy B" comparison.
-    - [ ] Documentation:
-        - [ ] Explain how you would migrate this to `Vertex AI Vector Search` (`Matching Engine`) in production
-        - [ ] Explain the choice of `similarity metric` (Cosine vs. Euclidean)
-            - [ ] The Benchmarking Test:
-                - A `.json` of the diff of the two different methods that we deployed for atleast `5` complex queries
-                - Table content:
+---
 
-| Input Query | Result A (Raw Vector) | Result B (QueryReWriter) |
+## 1. Project Structure
+- [ ] Modular layout with separate files for: Ingestion, Embedding, Vector Store, Retrieval, Mocks, Benchmark Runner
+- [ ] `tests/` directory with separate test files per module
+- [ ] `docs/` directory for the decisions writeup
+- [ ] `retrieval_benchmark.md` at repo root
+
+---
+
+## 2. Data Ingestor
+- [ ] `DataIngestor` class
+  - [ ] Load raw text (5–10 technical paragraphs — hardcoded dataset or `.txt` file)
+  - [ ] Chunk the text (fixed-size with overlap, e.g. 256 tokens / 50 overlap — **document this choice**)
+  - [ ] Return clean `List[Document]` with metadata (`chunk_id`, `source`)
+
+---
+
+## 3. Embedding Model
+- [ ] Wrap `sentence-transformers` (`all-MiniLM-L6-v2`) behind a class interface
+  that mirrors `TextEmbeddingModel.get_embeddings()` signature
+- [ ] Method: `embed(texts: List[str]) -> List[List[float]]`
+
+---
+
+## 4. Vector Store
+- [ ] `VectorStore` class wrapping **ChromaDB**
+  - [ ] `add(chunks, embeddings, metadata)`
+  - [ ] `query(embedding, top_k) -> List[Document]`
+  - [ ] Use **cosine similarity** (document the why in decisions writeup)
+
+---
+
+## 5. Mocks
+- [ ] `MockTextEmbeddingModel` — mirrors `vertexai.language_models.TextEmbeddingModel`
+  - Returns deterministic fake embeddings (sentence-transformers under the hood is fine)
+- [ ] `MockGenerativeModel` — mirrors `vertexai.generativeai.GenerativeModel`
+  - `generate_content(prompt)` returns a hardcoded query expansion string
+  - Example: `"How does the system handle peak load?"` → `"system load balancing peak traffic handling capacity scaling"`
+
+---
+
+## 6. Retrieval
+- [ ] **Strategy A — Raw Retriever**
+  - Embed query as-is → cosine search → return top-K chunks
+- [ ] **Strategy B — Query Expanded Retriever**
+  - [ ] `QueryReWriter` class — wraps `MockGenerativeModel`, rewrites the input query
+  - Pass query to `QueryReWriter` → get expanded query → embed → cosine search → return top-K chunks
+
+---
+
+## 7. Benchmark Runner
+- [ ] Run both strategies on **at least 3 complex queries**
+  (use the doc's example + 2 more, e.g. *"What are the failure recovery mechanisms?"* / *"How is data consistency maintained?"*)
+- [ ] Output `benchmark_results.json` — structured diff of Strategy A vs B per query
+- [ ] Print/render the comparison table:
+
+| Input Query | Result A (Raw Vector) | Result B (Query Expanded) |
 |---|---|---|
-| How does the system handle peak load? | Top 3 chunks retrieved via direct embedding | Top 3 chunks retrieved after the "Query Expansion" model rewrites the input |
+| How does the system handle peak load? | Top 3 chunk IDs + scores | Top 3 chunk IDs + scores + rewritten query shown |
+
+---
+
+## 8. Tests
+- [ ] Verify chunking output shape and metadata
+- [ ] Verify top-K results are returned for both strategies
+- [ ] Verify `MockTextEmbeddingModel` and `MockGenerativeModel` return expected shapes/types without hitting GCP
+- [ ] Use `unittest.mock` / `pytest-mock` to patch `vertexai.*` imports
+
+---
+
+## 9. Documentation (`decisions.md`)
+- [ ] **Similarity metric choice** — why cosine over Euclidean
+  (unit-normalised embeddings, magnitude-invariant, standard for semantic search)
+- [ ] **Vertex AI migration path** — how you'd swap out each layer:
+  - `sentence-transformers` → `textembedding-gecko` via `TextEmbeddingModel.get_embeddings()`
+  - `ChromaDB` → Vertex AI Vector Search (Matching Engine): index creation, upsert via `IndexEndpoint`, deploy + query flow
+
+---
+
+## 10. `retrieval_benchmark.md`
+- [ ] Copy the benchmark table output here
+- [ ] Brief commentary on observed differences between Strategy A and B per query
+
+---
+
+## 11. Local LLM — Full Generation Pipeline (Beyond Assignment Scope)
+- [ ] Integrate **Ollama** with LangChain for actual response generation
+  - [ ] Augmentation step — inject retrieved chunks into a prompt template before sending to LLM
+  - [ ] Full RAG loop: Query → Retrieve → Augment → Generate → Response
+
+---
+
+## 12. Advanced Retrieval (Beyond Assignment Scope)
+- [ ] **Ensemble Retriever** — combine BM25 (keyword) + semantic (embedding) + vector search
+  - Use `langchain.retrievers.EnsembleRetriever` with configurable weights
+- [ ] **Agent-based Query ReWriter** — replace the mock with a real LLM-backed rewriter via Ollama
+
+---
+
+## 13. Productionisation (Beyond Assignment Scope)
+- [ ] **VdB Optimisation** — tune ChromaDB HNSW params (`ef_construction`, `M`, `ef_search`)
+- [ ] **Token management** — track prompt token counts, enforce context window limits
+- [ ] **Inference timing** — log retrieval latency + generation latency per query
+- [ ] **Guard-rails** — input validation, empty-result handling, max chunk fallback
+- [ ] **Edge-case handling** — no results found, query too short, duplicate chunks
+- [ ] **Docker** — containerise the full pipeline with `requirements.txt` pinned
+
+---
+
+## Execution Order
+
+**Assignment core (submit this):**
+`DataIngestor` → `EmbeddingModel` → `VectorStore` → `Mocks` → `RawRetriever` → `QueryExpandedRetriever` → `BenchmarkRunner` → Tests → Docs → `retrieval_benchmark.md`
+
+**Portfolio layer (build on top):**
+`Ollama + LangChain` → `Augmentation / Prompt Template` → `BM25 + Ensemble Retriever` → `Agent ReWriter` → `VdB Tuning` → `Guard-rails + Edge Cases` → `Inference Logging` → `Docker`
