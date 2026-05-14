@@ -39,3 +39,24 @@ python scripts/data_ingestor.py
     ```
     python scripts/pipeline.py --ingest --llm qwen
     ```
+7. To run the tests, run the following command in the root folder:
+```
+pytest tests/ -v
+```
+8. To run the benchmarks:
+    - Stub LLM:
+    ```
+    python scripts/benchmark_runner.py --stub-llm
+    ```
+    - Llama 3.2:
+    ```
+    python scripts/benchmark_runner.py --llm llama
+    ```
+    - Deepseek R1:
+    ```
+    python scripts/benchmark_runner.py --llm deepseek 
+    ```
+    - Qwen 2.5:
+    ```
+    python scripts/benchmark_runner.py --llm qwen
+    ```
