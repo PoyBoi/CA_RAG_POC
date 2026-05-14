@@ -217,7 +217,7 @@ if __name__ == "__main__":
     from langchain_huggingface import HuggingFaceEmbeddings
     from vector_store import VectorStore
     from mocks import MockGenerativeModel
-    from .retriever import RawRetriever, QueryExpandedRetriever
+    from retriever import RawRetriever, QueryExpandedRetriever
 
     emb = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2",
