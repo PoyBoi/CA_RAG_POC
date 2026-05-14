@@ -1,0 +1,267 @@
+{
+  "queries": [
+    {
+      "input_query": "What are the main approaches to machine learning?",
+      "strategy_a": {
+        "top_k": [
+          {
+            "chunk_id": "1004",
+            "score": 0.5865,
+            "snippet": "machine learning in the 2010s eclipsed all other approaches (so much so that some sources, especially in the business wo"
+          },
+          {
+            "chunk_id": "1004",
+            "score": 0.5865,
+            "snippet": "machine learning in the 2010s eclipsed all other approaches (so much so that some sources, especially in the business wo"
+          },
+          {
+            "chunk_id": "1004",
+            "score": 0.5865,
+            "snippet": "machine learning in the 2010s eclipsed all other approaches (so much so that some sources, especially in the business wo"
+          }
+        ],
+        "latency_ms": 622.71
+      },
+      "strategy_b": {
+        "rewritten_query": "machine learning approaches, supervised learning, unsupervised learning, reinforcement learning, semi-supervised learning, deep learning, generative models, discriminative models, clustering algorithms, classification, regression, feature engineering, model selection, evaluation metrics, overfitting, underfitting, bias-variance tradeoff, support vector machines (SVMs), decision trees, neural networks, Bayesian methods",
+        "top_k": [
+          {
+            "chunk_id": "88",
+            "score": 0.6395,
+            "snippet": "There are several kinds of machine learning. [[Unsupervised learning]] analyzes a stream of data and finds patterns and "
+          },
+          {
+            "chunk_id": "88",
+            "score": 0.6395,
+            "snippet": "There are several kinds of machine learning. [[Unsupervised learning]] analyzes a stream of data and finds patterns and "
+          },
+          {
+            "chunk_id": "88",
+            "score": 0.6395,
+            "snippet": "There are several kinds of machine learning. [[Unsupervised learning]] analyzes a stream of data and finds patterns and "
+          }
+        ],
+        "latency_ms": 24874.46
+      },
+      "diff": {
+        "overlap_ids": [],
+        "only_in_a": [
+          "1004"
+        ],
+        "only_in_b": [
+          "88"
+        ]
+      }
+    },
+    {
+      "input_query": "How does artificial intelligence pose risks to society?",
+      "strategy_a": {
+        "top_k": [
+          {
+            "chunk_id": "447",
+            "score": 0.4977,
+            "snippet": "as the use of AI has become widespread, several unintended consequences and risks have been identified.{{Sfnp|Russell|No"
+          },
+          {
+            "chunk_id": "447",
+            "score": 0.4977,
+            "snippet": "as the use of AI has become widespread, several unintended consequences and risks have been identified.{{Sfnp|Russell|No"
+          },
+          {
+            "chunk_id": "447",
+            "score": 0.4977,
+            "snippet": "as the use of AI has become widespread, several unintended consequences and risks have been identified.{{Sfnp|Russell|No"
+          }
+        ],
+        "latency_ms": 7.53
+      },
+      "strategy_b": {
+        "rewritten_query": "artificial intelligence, risks, societal risks, ethical concerns, algorithmic bias, discrimination, job displacement, unemployment, economic impact, regulation of AI, policy implications, government oversight, AI security risks, cybersecurity threats, mental health impact, social isolation, autonomous systems risks, self-driving car safety, human rights implications, societal stability impact, long-term consequences",
+        "top_k": [
+          {
+            "chunk_id": "448",
+            "score": 0.4932,
+            "snippet": "artificial intelligence risks, benefits and policy imperatives |url=https://www.oecd.org/en/publications/assessing-poten"
+          },
+          {
+            "chunk_id": "448",
+            "score": 0.4932,
+            "snippet": "artificial intelligence risks, benefits and policy imperatives |url=https://www.oecd.org/en/publications/assessing-poten"
+          },
+          {
+            "chunk_id": "448",
+            "score": 0.4932,
+            "snippet": "artificial intelligence risks, benefits and policy imperatives |url=https://www.oecd.org/en/publications/assessing-poten"
+          }
+        ],
+        "latency_ms": 18859.84
+      },
+      "diff": {
+        "overlap_ids": [],
+        "only_in_a": [
+          "447"
+        ],
+        "only_in_b": [
+          "448"
+        ]
+      }
+    },
+    {
+      "input_query": "What is the difference between narrow AI and artificial general intelligence?",
+      "strategy_a": {
+        "top_k": [
+          {
+            "chunk_id": "1032",
+            "score": 0.3538,
+            "snippet": "==== Narrow vs. general AI ====\n{{Main|Weak artificial intelligence|Artificial general intelligence}}"
+          },
+          {
+            "chunk_id": "1032",
+            "score": 0.3538,
+            "snippet": "==== Narrow vs. general AI ====\n{{Main|Weak artificial intelligence|Artificial general intelligence}}"
+          },
+          {
+            "chunk_id": "1032",
+            "score": 0.3538,
+            "snippet": "==== Narrow vs. general AI ====\n{{Main|Weak artificial intelligence|Artificial general intelligence}}"
+          }
+        ],
+        "latency_ms": 7.14
+      },
+      "strategy_b": {
+        "rewritten_query": "narrow AI, specialized AI, weak AI, artificial general intelligence, AGI, strong AI, difference between, comparison, types of AI, AI classifications, narrow vs general AI, machine learning applications",
+        "top_k": [
+          {
+            "chunk_id": "1032",
+            "score": 0.5274,
+            "snippet": "==== Narrow vs. general AI ====\n{{Main|Weak artificial intelligence|Artificial general intelligence}}"
+          },
+          {
+            "chunk_id": "1032",
+            "score": 0.5274,
+            "snippet": "==== Narrow vs. general AI ====\n{{Main|Weak artificial intelligence|Artificial general intelligence}}"
+          },
+          {
+            "chunk_id": "1032",
+            "score": 0.5274,
+            "snippet": "==== Narrow vs. general AI ====\n{{Main|Weak artificial intelligence|Artificial general intelligence}}"
+          }
+        ],
+        "latency_ms": 16630.49
+      },
+      "diff": {
+        "overlap_ids": [
+          "1032"
+        ],
+        "only_in_a": [],
+        "only_in_b": []
+      }
+    },
+    {
+      "input_query": "How have neural networks contributed to the development of AI?",
+      "strategy_a": {
+        "top_k": [
+          {
+            "chunk_id": "921",
+            "score": 0.7812,
+            "snippet": "By 2000, solutions developed by AI researchers were being widely used, although in the 1990s they were rarely described "
+          },
+          {
+            "chunk_id": "921",
+            "score": 0.7812,
+            "snippet": "By 2000, solutions developed by AI researchers were being widely used, although in the 1990s they were rarely described "
+          },
+          {
+            "chunk_id": "921",
+            "score": 0.7812,
+            "snippet": "By 2000, solutions developed by AI researchers were being widely used, although in the 1990s they were rarely described "
+          }
+        ],
+        "latency_ms": 6.59
+      },
+      "strategy_b": {
+        "rewritten_query": "artificial neural networks, deep learning, machine learning, neural network models, neural computing, neural algorithms, neural systems, artificial intelligence, AI advancements, AI development, AI progress, AI applications, AI technologies, AI research, AI innovations, AI breakthroughs, AI capabilities, AI evolution, AI growth, AI impact, AI improvements, AI maturity, AI revolution, neural network contributions, neural network impacts, neural network effects on AI, neural network advancements in AI, neural network role in AI development, neural network influence on AI progress, neural network innovations in AI technologies",
+        "top_k": [
+          {
+            "chunk_id": "279",
+            "score": 0.7704,
+            "snippet": "[[File:AI Overviews result for What is Wikipedia, 2 March 2026.png|thumb|[[AI Overviews]], an example of AI use on searc"
+          },
+          {
+            "chunk_id": "279",
+            "score": 0.7704,
+            "snippet": "[[File:AI Overviews result for What is Wikipedia, 2 March 2026.png|thumb|[[AI Overviews]], an example of AI use on searc"
+          },
+          {
+            "chunk_id": "279",
+            "score": 0.7704,
+            "snippet": "[[File:AI Overviews result for What is Wikipedia, 2 March 2026.png|thumb|[[AI Overviews]], an example of AI use on searc"
+          }
+        ],
+        "latency_ms": 15829.81
+      },
+      "diff": {
+        "overlap_ids": [],
+        "only_in_a": [
+          "921"
+        ],
+        "only_in_b": [
+          "279"
+        ]
+      }
+    },
+    {
+      "input_query": "What ethical concerns are associated with artificial intelligence?",
+      "strategy_a": {
+        "top_k": [
+          {
+            "chunk_id": "796",
+            "score": 0.5083,
+            "snippet": "artificial intelligence ethics and safety |url=https://www.turing.ac.uk/sites/default/files/2019-06/understanding_artifi"
+          },
+          {
+            "chunk_id": "796",
+            "score": 0.5083,
+            "snippet": "artificial intelligence ethics and safety |url=https://www.turing.ac.uk/sites/default/files/2019-06/understanding_artifi"
+          },
+          {
+            "chunk_id": "796",
+            "score": 0.5083,
+            "snippet": "artificial intelligence ethics and safety |url=https://www.turing.ac.uk/sites/default/files/2019-06/understanding_artifi"
+          }
+        ],
+        "latency_ms": 6.72
+      },
+      "strategy_b": {
+        "rewritten_query": "artificial intelligence, ethical concerns, machine learning, AI ethics, algorithmic bias, data privacy, transparency, accountability, fairness, autonomy, moral dilemmas, algorithmic decision-making, societal impact, regulatory frameworks, human oversight, unintended consequences",
+        "top_k": [
+          {
+            "chunk_id": "22",
+            "score": 0.6128,
+            "snippet": "concerns]], [[AI aftermath scenarios|AI's long-term effects]], and [[Existential risk from artificial intelligence|poten"
+          },
+          {
+            "chunk_id": "22",
+            "score": 0.6128,
+            "snippet": "concerns]], [[AI aftermath scenarios|AI's long-term effects]], and [[Existential risk from artificial intelligence|poten"
+          },
+          {
+            "chunk_id": "22",
+            "score": 0.6128,
+            "snippet": "concerns]], [[AI aftermath scenarios|AI's long-term effects]], and [[Existential risk from artificial intelligence|poten"
+          }
+        ],
+        "latency_ms": 10614.65
+      },
+      "diff": {
+        "overlap_ids": [],
+        "only_in_a": [
+          "796"
+        ],
+        "only_in_b": [
+          "22"
+        ]
+      }
+    }
+  ]
+}
