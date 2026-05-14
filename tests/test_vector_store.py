@@ -12,8 +12,8 @@ Covers:
 import pytest
 from langchain.schema import Document
 from langchain_huggingface import HuggingFaceEmbeddings
-from ..scripts.vector_store import VectorStore
-
+# from ..scripts.vector_store import VectorStore
+from vector_store import VectorStore
 
 @pytest.fixture(scope="module")
 def emb():
