@@ -21,6 +21,7 @@ Flags
 
 import argparse
 import logging
+import subprocess
 import sys
 from pathlib import Path
 
@@ -29,6 +30,55 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+# MODEL_MAP mirrors the one in core_block — kept here so we can resolve the
+# real Ollama tag before CoreDependancies boots.
+_MODEL_MAP = {
+    "llama":    "llama3.2-vision:11b",
+    "qwen":     "qwen2.5:7b",
+    "deepseek": "deepseek-r1:14b",
+}
+
+
+def _ensure_model(alias: str) -> None:
+    """
+    Check whether the Ollama model is already pulled locally.
+    If it is → skip (fast, no network).
+    If it isn't → pull it now, streaming progress to stdout.
+
+    Raises SystemExit if Ollama isn't running at all.
+    """
+    model_tag = _MODEL_MAP.get(alias)
+    if not model_tag:
+        return   # stub / unknown — nothing to pull
+
+    # Ask Ollama which models are already downloaded
+    try:
+        result = subprocess.run(
+            ["ollama", "list"],
+            capture_output=True, text=True, timeout=10,
+        )
+    except FileNotFoundError:
+        logger.error("'ollama' binary not found — is Ollama installed and on PATH?")
+        sys.exit(1)
+    except subprocess.TimeoutExpired:
+        logger.error("Ollama did not respond — is the Ollama server running?")
+        sys.exit(1)
+
+    # `ollama list` output has the model name as the first token on each line
+    installed = {line.split()[0] for line in result.stdout.splitlines() if line.split()}
+
+    if any(model_tag in entry for entry in installed):
+        logger.info(f"Ollama: '{model_tag}' already installed — skipping pull")
+        return
+
+    logger.info(f"Ollama: '{model_tag}' not found locally — pulling now...")
+    # Stream pull output directly to the terminal so the user sees progress
+    pull = subprocess.run(["ollama", "pull", model_tag])
+    if pull.returncode != 0:
+        logger.error(f"Failed to pull '{model_tag}' — check Ollama logs")
+        sys.exit(1)
+    logger.info(f"Ollama: '{model_tag}' ready")
 
 # ---------------------------------------------------------------------------
 # Config defaults
@@ -119,6 +169,10 @@ def interactive_loop(core, top_k: int):
 
 def main():
     args = parse_args()
+
+    # Pull the model if needed — no-op if already installed, no /bye dance needed
+    if not args.stub_llm:
+        _ensure_model(args.llm)
 
     from core_block import CoreDependancies
     core = CoreDependancies(
