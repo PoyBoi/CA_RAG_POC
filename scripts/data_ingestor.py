@@ -32,8 +32,8 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Chunking constants  (document this choice in decisions.md)
 # ---------------------------------------------------------------------------
-CHUNK_SIZE    = 256   # tokens / chars depending on splitter
-CHUNK_OVERLAP = 50
+CHUNK_SIZE    = 512   # larger chunks for Wikipedia-style long-form prose
+CHUNK_OVERLAP = 100   # bigger overlap to avoid splitting key explanatory sentences
 
 
 class DataIngestor:
@@ -118,8 +118,8 @@ class DataIngestor:
         return docs
 
     def _load_txt(self, path: Path) -> Document:
-        """Load a plain-text file as a single Document."""
-        text = path.read_text(encoding="utf-8")
+        """Load a plain-text file as a single Document, cleaning markup first."""
+        text = self._clean_wikitext(path.read_text(encoding="utf-8"))
         return Document(
             page_content=text,
             metadata={"source": str(path), "doc_id": path.stem},
@@ -147,6 +147,23 @@ class DataIngestor:
         #     for i, row in df.iterrows()
         # ]
         raise NotImplementedError
+
+    @staticmethod
+    def _clean_wikitext(text: str) -> str:
+        """
+        Strip Wikipedia markup before chunking so it doesn't pollute embeddings.
+        Removes: citations {{...}}, file embeds [[File:...]], wikilinks [[X|Y]]→Y,
+        ref tags, section headers ==X==, and excess whitespace.
+        """
+        import re
+        text = re.sub(r"\{\{[^}]*\}\}", "", text)          # {{citations / templates}}
+        text = re.sub(r"\[\[File:[^\]]*\]\]", "", text)   # [[File:...]]
+        text = re.sub(r"\[\[([^|\]]+\|)?([^\]]+)\]\]", r"\2", text)  # [[Link|Label]] -> Label
+        text = re.sub(r"<ref[^>]*>.*?</ref>", "", text, flags=re.DOTALL)  # <ref>...</ref>
+        text = re.sub(r"<[^>]+>", "", text)                    # remaining HTML tags
+        text = re.sub(r"={2,}\s*(.+?)\s*={2,}", r"\1", text)  # ==Section== -> Section
+        text = re.sub(r"\s+", " ", text).strip()
+        return text
 
     def _chunk(self, docs: List[Document]) -> List[Document]:
         """
