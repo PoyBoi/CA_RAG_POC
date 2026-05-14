@@ -139,13 +139,26 @@ class VectorStore:
         top_k:      int = 5,
     ) -> List[tuple]:
         """
-        Like query() but returns (Document, score) tuples.
-        Useful for benchmark comparisons.
+        Like query() but returns (Document, score) tuples, deduplicated by chunk_id.
+        Fetches top_k * 3 candidates then deduplicates so the final list has
+        at most top_k unique chunks even when the ensemble returns repeats.
         """
         if self._store is None:
             raise RuntimeError("VectorStore: store is None — add documents first")
 
-        return self._store.similarity_search_with_score(query_text, k=top_k)
+        # Over-fetch so deduplication does not shrink results below top_k
+        raw = self._store.similarity_search_with_score(query_text, k=top_k * 3)
+
+        seen, deduped = set(), []
+        for doc, score in raw:
+            key = doc.metadata.get("chunk_id", doc.page_content[:80])
+            if key not in seen:
+                seen.add(key)
+                deduped.append((doc, score))
+            if len(deduped) == top_k:
+                break
+
+        return deduped
 
     def delete(self, ids: List[str]) -> None:
         """Remove specific documents by ID."""
