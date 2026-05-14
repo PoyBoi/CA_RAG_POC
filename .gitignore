@@ -220,4 +220,5 @@ __marimo__/
 # Custom Rules
 /db_test
 /db
+/db_test_bench
 /testing
