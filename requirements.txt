@@ -1,0 +1,34 @@
+# Core
+langchain>=0.2.0
+langchain-community>=0.2.0
+langchain-huggingface>=0.0.3
+langchain-chroma>=0.1.0
+langchain-ollama>=0.1.0
+
+# Embeddings
+sentence-transformers>=2.7.0
+torch>=2.0.0
+
+# Vector stores
+chromadb>=0.5.0
+faiss-gpu>=1.8.0       # swap for faiss-gpu if on CUDA
+
+# Data
+pandas>=2.0.0
+pyarrow>=14.0.0        # parquet support
+
+# Retrieval
+rank-bm25>=0.2.2       # BM25Retriever backend
+
+# Utilities
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+
+# Testing
+pytest>=8.0.0
+pytest-mock>=3.12.0
+
+# Optional: notebook support for data analysis
+# jupyter
+# matplotlib
+# seaborn
