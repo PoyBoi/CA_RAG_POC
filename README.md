@@ -29,13 +29,13 @@ python scripts/data_ingestor.py
     ```
     - Llama 3.2:
     ```
-    ollama run llama3.2-vision:11b; python scripts/pipeline.py --ingest --llm llama
+    python scripts/pipeline.py --ingest --llm llama
     ```
     - Deepseek R1:
     ```
-    ollama run deepseek-r1:14b; python scripts/pipeline.py --ingest --llm deepseek 
+    python scripts/pipeline.py --ingest --llm deepseek 
     ```
     - Qwen 2.5:
     ```
-    ollama run qwen2.5:7b; python scripts/pipeline.py --ingest --llm qwen
+    python scripts/pipeline.py --ingest --llm qwen
     ```
