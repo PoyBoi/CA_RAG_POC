@@ -36,6 +36,63 @@ CHUNK_SIZE    = 512   # larger chunks for Wikipedia-style long-form prose
 CHUNK_OVERLAP = 100   # bigger overlap to avoid splitting key explanatory sentences
 
 
+
+# ---------------------------------------------------------------------------
+# Hardcoded fallback dataset  (used when ./data is empty or missing)
+# Satisfies the assignment requirement of 5-10 technical paragraphs.
+# ---------------------------------------------------------------------------
+FALLBACK_PARAGRAPHS = [
+    ("para_001", "Artificial intelligence (AI) is the simulation of human intelligence in machines. "
+     "AI systems are designed to perform tasks such as learning, reasoning, problem-solving, "
+     "perception, and language understanding. The field was founded on the assumption that "
+     "human intelligence can be precisely described and simulated by a machine."),
+
+    ("para_002", "Machine learning is a subset of AI that enables systems to learn and improve "
+     "from experience without being explicitly programmed. It focuses on developing computer "
+     "programs that can access data and use it to learn for themselves. Supervised learning, "
+     "unsupervised learning, and reinforcement learning are its three main paradigms."),
+
+    ("para_003", "Deep learning uses multi-layered artificial neural networks to model and process "
+     "complex patterns in data. It has achieved breakthrough results in image recognition, "
+     "natural language processing, and speech recognition. The depth of the network allows "
+     "it to learn hierarchical representations of raw input data automatically."),
+
+    ("para_004", "A Retrieval-Augmented Generation (RAG) pipeline combines a retrieval system "
+     "with a generative language model. The retrieval component fetches relevant documents "
+     "from a vector database, and the generation component uses those documents as context "
+     "to produce accurate, grounded responses. This reduces hallucination in language models."),
+
+    ("para_005", "Vector databases store high-dimensional embeddings and enable efficient "
+     "similarity search using distance metrics such as cosine similarity or Euclidean distance. "
+     "ChromaDB, FAISS, and Pinecone are popular options. Cosine similarity is preferred for "
+     "semantic search because it is magnitude-invariant and works well with normalised embeddings."),
+
+    ("para_006", "Query expansion is a technique to improve information retrieval by reformulating "
+     "the original query with additional relevant terms. A language model can rewrite a short "
+     "query into a richer set of keywords that better match the vocabulary used in the target "
+     "documents, improving recall without sacrificing precision."),
+
+    ("para_007", "Embeddings are dense vector representations of text that capture semantic meaning. "
+     "The sentence-transformers library produces embeddings by fine-tuning BERT-based models "
+     "on sentence-pair tasks. The all-MiniLM-L6-v2 model produces 384-dimensional embeddings "
+     "and is widely used for semantic search due to its balance of speed and quality."),
+
+    ("para_008", "Ethical concerns in AI include algorithmic bias, lack of transparency, and risks "
+     "to privacy and autonomy. Bias can enter AI systems through skewed training data or flawed "
+     "objective functions. Explainability research aims to make model decisions interpretable "
+     "so that humans can audit and correct them."),
+
+    ("para_009", "Artificial General Intelligence (AGI) refers to a hypothetical AI system capable "
+     "of performing any intellectual task that a human can. Unlike narrow AI, which is optimised "
+     "for a specific domain, AGI would generalise across tasks without retraining. Most researchers "
+     "consider AGI to be decades away, if achievable at all."),
+
+    ("para_010", "Natural language processing (NLP) is a branch of AI concerned with the interaction "
+     "between computers and human language. Tasks include sentiment analysis, named entity recognition, "
+     "machine translation, and question answering. Large language models such as GPT and BERT have "
+     "significantly advanced the state of the art across all NLP benchmarks."),
+]
+
 class DataIngestor:
     """
     Load, chunk, and prepare documents for vector store ingestion.
@@ -71,11 +128,27 @@ class DataIngestor:
     def load_and_chunk(self) -> List[Document]:
         """
         Load ALL supported files in data_dir and return chunked Documents.
-        Does not consult the manifest — full reload.
+        Falls back to the hardcoded FALLBACK_PARAGRAPHS dataset if data_dir
+        is empty or does not exist — satisfies the assignment requirement of
+        having a working dataset out of the box.
         """
         raw_docs = self._load_all()
-        chunks   = self._chunk(raw_docs)
-        logger.info(f"DataIngestor: {len(raw_docs)} files → {len(chunks)} chunks")
+
+        if not raw_docs:
+            logger.warning(
+                f"DataIngestor: no files found in '{self.data_dir}' "
+                "— using hardcoded fallback dataset"
+            )
+            raw_docs = [
+                Document(
+                    page_content=text,
+                    metadata={"source": "fallback", "doc_id": doc_id},
+                )
+                for doc_id, text in FALLBACK_PARAGRAPHS
+            ]
+
+        chunks = self._chunk(raw_docs)
+        logger.info(f"DataIngestor: {len(raw_docs)} source docs → {len(chunks)} chunks")
         return chunks
 
     def load_incremental(
@@ -151,17 +224,86 @@ class DataIngestor:
     @staticmethod
     def _clean_wikitext(text: str) -> str:
         """
-        Strip Wikipedia markup before chunking so it doesn't pollute embeddings.
-        Removes: citations {{...}}, file embeds [[File:...]], wikilinks [[X|Y]]→Y,
-        ref tags, section headers ==X==, and excess whitespace.
+        Strip Wikipedia markup before chunking so it does not pollute embeddings.
+        Removes: {{templates}}, [[File:...]], [[Link|Label]]->Label,
+        <ref> blocks, HTML tags, ==headers==, bare URLs, excess whitespace.
         """
         import re
-        text = re.sub(r"\{\{[^}]*\}\}", "", text)          # {{citations / templates}}
-        text = re.sub(r"\[\[File:[^\]]*\]\]", "", text)   # [[File:...]]
-        text = re.sub(r"\[\[([^|\]]+\|)?([^\]]+)\]\]", r"\2", text)  # [[Link|Label]] -> Label
-        text = re.sub(r"<ref[^>]*>.*?</ref>", "", text, flags=re.DOTALL)  # <ref>...</ref>
-        text = re.sub(r"<[^>]+>", "", text)                    # remaining HTML tags
-        text = re.sub(r"={2,}\s*(.+?)\s*={2,}", r"\1", text)  # ==Section== -> Section
+        # Remove {{templates}} - loop handles nested cases
+        for _ in range(3):
+            text = re.sub(r"\{\{[^{}]*\}\}", "", text)
+        # Remove [[File:...]] / [[Image:...]] embeds
+        text = re.sub(r"\[\[(File|Image):[^\]]*\]\]", "", text, flags=re.IGNORECASE)
+        # [[Link|Label]] -> Label,  [[Link]] -> Link
+        text = re.sub(r"\[\[(?:[^|\]]+\|)?([^\]]+)\]\]", r"\1", text)
+        # <ref>...</ref> blocks (multiline)
+        text = re.sub(r"<ref[^>]*>.*?</ref>", "", text, flags=re.DOTALL)
+        text = re.sub(r"<ref[^/]*/?>", "", text)
+        # Remaining HTML tags
+        text = re.sub(r"<[^>]+>", "", text)
+        # ==Section Headers== -> plain text
+        text = re.sub(r"={2,}\s*(.+?)\s*={2,}", r"\1", text)
+        # Bare URLs
+        text = re.sub(r"https?://\S+", "", text)
+        # Collapse whitespace
+        text = re.sub(r"\s+", " ", text).strip()
+        return text
+    def _load_txt(self, path: Path) -> Document:
+        """Load a plain-text file as a single Document, cleaning markup first."""
+        text = self._clean_wikitext(path.read_text(encoding="utf-8"))
+        return Document(
+            page_content=text,
+            metadata={"source": str(path), "doc_id": path.stem},
+        )
+
+    def _load_parquet(self, path: Path) -> List[Document]:
+        """
+        Load a parquet file.
+        Expects a 'text' column; all other columns become metadata.
+        TODO: make text column name configurable
+        """
+        # TODO: implement
+        # import pandas as pd
+        # df = pd.read_parquet(path)
+        # assert "text" in df.columns, f"Parquet {path} missing 'text' column"
+        # return [
+        #     Document(
+        #         page_content=row["text"],
+        #         metadata={
+        #             "source": str(path),
+        #             "doc_id": f"{path.stem}_{i}",
+        #             **{k: v for k, v in row.items() if k != "text"},
+        #         },
+        #     )
+        #     for i, row in df.iterrows()
+        # ]
+        raise NotImplementedError
+
+    @staticmethod
+    def _clean_wikitext(text: str) -> str:
+        """
+        Strip Wikipedia markup before chunking so it does not pollute embeddings.
+        Removes: citations {{...}}, file embeds [[File:...]], wikilinks [[X|Y]] -> Y,
+        ref tags, section headers ==X==, bare URLs, and excess whitespace.
+        """
+        import re
+        # Remove nested {{templates}} - iterate twice for nested cases
+        for _ in range(3):
+            text = re.sub(r"\{\{[^{}]*\}\}", "", text)
+        # Remove [[File:...]] and [[Image:...]] embeds
+        text = re.sub(r"\[\[(File|Image):[^\]]*\]\]", "", text, flags=re.IGNORECASE)
+        # Convert [[Link|Label]] -> Label, [[Link]] -> Link
+        text = re.sub(r"\[\[(?:[^|\]]+\|)?([^\]]+)\]\]", r"", text)
+        # Remove <ref>...</ref> blocks (including multiline)
+        text = re.sub(r"<ref[^>]*>.*?</ref>", "", text, flags=re.DOTALL)
+        text = re.sub(r"<ref[^/]*/?>", "", text)   # self-closing <ref ... />
+        # Remove remaining HTML tags
+        text = re.sub(r"<[^>]+>", "", text)
+        # Flatten ==Section Headers== to plain text
+        text = re.sub(r"={2,}\s*(.+?)\s*={2,}", r"", text)
+        # Remove bare URLs
+        text = re.sub(r"https?://\S+", "", text)
+        # Collapse excess whitespace
         text = re.sub(r"\s+", " ", text).strip()
         return text
 
