@@ -9,7 +9,8 @@ Covers:
 
 import pytest
 from unittest.mock import patch, MagicMock
-from ..scripts.mocks import MockTextEmbeddingModel, MockGenerativeModel
+# from ..scripts.mocks import MockTextEmbeddingModel, MockGenerativeModel
+from mocks import MockTextEmbeddingModel, MockGenerativeModel
 
 
 # --------------------------------------------------------------------------- #
