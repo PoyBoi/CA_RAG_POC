@@ -12,9 +12,9 @@ import pytest
 from langchain.schema import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 
-from ..scripts.mocks import MockGenerativeModel
-from ..scripts.retreiver import RawRetriever, QueryExpandedRetriever, QueryReWriter, RetrievalResult
-from ..scripts.vector_store import VectorStore
+from mocks import MockTextEmbeddingModel, MockGenerativeModel
+from vector_store import VectorStore
+from retriever import RawRetriever, QueryExpandedRetriever, QueryReWriter, RetrievalResult
 
 TOP_K = 3
 
