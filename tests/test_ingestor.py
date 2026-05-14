@@ -9,8 +9,8 @@ Covers:
 
 import pytest
 from langchain.schema import Document
-from ..scripts.data_ingestor import DataIngestor
-
+# from ..scripts.data_ingestor import DataIngestor
+from data_ingestor import DataIngestor
 
 # --------------------------------------------------------------------------- #
 #  Fixtures                                                                    #
