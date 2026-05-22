@@ -10,42 +10,44 @@
             "snippet": "machine learning in the 2010s eclipsed all other approaches (so much so that some sources, especially in the business wo"
           },
           {
+            "chunk_id": "12",
+            "score": 0.705,
+            "snippet": "a part of AI from the beginning. , the training data is labelled with the expected answers, while in \u0001, the model identi"
+          },
+          {
             "chunk_id": "88",
             "score": 0.7144,
             "snippet": "There are several kinds of machine learning. [[Unsupervised learning]] analyzes a stream of data and finds patterns and "
           }
         ],
-        "latency_ms": 581.41
+        "latency_ms": 718.19
       },
       "strategy_b": {
-        "rewritten_query": "machine-learning, supervised-learning, unsupervised-learning, reinforcement-learning, semi-supervised-learning, transfer-learning, instance-based-learning, rule-based-learning, classification, regression, deep-learning, neural-networks",
+        "rewritten_query": "[STUB] LLM response",
         "top_k": [
           {
-            "chunk_id": "88",
-            "score": 0.7513,
-            "snippet": "There are several kinds of machine learning. [[Unsupervised learning]] analyzes a stream of data and finds patterns and "
+            "chunk_id": "538",
+            "score": 1.471,
+            "snippet": "|url-status=live}}</ref> Taiwan aims to [[Nuclear power phase-out|phase out nuclear power]] by 2025.<ref name=\"Datacente"
           },
           {
-            "chunk_id": "15",
-            "score": 0.7793,
-            "snippet": "the model identifies patterns or structures in unlabelled data.]] There are several kinds of machine learning. Unsupervi"
-          },
-          {
-            "chunk_id": "1004",
-            "score": 0.8029,
-            "snippet": "machine learning in the 2010s eclipsed all other approaches (so much so that some sources, especially in the business wo"
+            "chunk_id": "1206",
+            "score": 1.4765,
+            "snippet": "2023 |work=TechTalks |archive-date=22 November 2023 |archive-url=https://web.archive.org/web/20231122142948/https://bdte"
           }
         ],
-        "latency_ms": 15681.88
+        "latency_ms": 16.0
       },
       "diff": {
-        "overlap_ids": [
+        "overlap_ids": [],
+        "only_in_a": [
+          "12",
           "1004",
           "88"
         ],
-        "only_in_a": [],
         "only_in_b": [
-          "15"
+          "1206",
+          "538"
         ]
       }
     },
@@ -64,31 +66,34 @@
             "snippet": "artificial intelligence risks, benefits and policy imperatives |url=https://www.oecd.org/en/publications/assessing-poten"
           }
         ],
-        "latency_ms": 6.0
+        "latency_ms": 11.36
       },
       "strategy_b": {
-        "rewritten_query": "AI risks, artificial intelligence risks, ethical concerns, safety issues, security vulnerabilities, societal impact, machine learning risks, algorithmic bias, data privacy, automation effects, job displacement, regulation challenges, governance frameworks, social implications, fairness in AI, transparency requirements, accountability measures, long-term consequences",
+        "rewritten_query": "[STUB] LLM response",
         "top_k": [
           {
-            "chunk_id": "448",
-            "score": 0.4741,
-            "snippet": "artificial intelligence risks, benefits and policy imperatives |url=https://www.oecd.org/en/publications/assessing-poten"
+            "chunk_id": "538",
+            "score": 1.471,
+            "snippet": "|url-status=live}}</ref> Taiwan aims to [[Nuclear power phase-out|phase out nuclear power]] by 2025.<ref name=\"Datacente"
           },
           {
-            "chunk_id": "447",
-            "score": 0.4948,
-            "snippet": "as the use of AI has become widespread, several unintended consequences and risks have been identified.{{Sfnp|Russell|No"
+            "chunk_id": "1206",
+            "score": 1.4765,
+            "snippet": "2023 |work=TechTalks |archive-date=22 November 2023 |archive-url=https://web.archive.org/web/20231122142948/https://bdte"
           }
         ],
-        "latency_ms": 16866.91
+        "latency_ms": 6.62
       },
       "diff": {
-        "overlap_ids": [
-          "448",
-          "447"
+        "overlap_ids": [],
+        "only_in_a": [
+          "447",
+          "448"
         ],
-        "only_in_a": [],
-        "only_in_b": []
+        "only_in_b": [
+          "1206",
+          "538"
+        ]
       }
     },
     {
@@ -106,31 +111,34 @@
             "snippet": "AI researchers are divided as to whether to pursue the goals of artificial general intelligence and [[superintelligence]"
           }
         ],
-        "latency_ms": 5.82
+        "latency_ms": 10.35
       },
       "strategy_b": {
-        "rewritten_query": "Narrow AI, Artificial General Intelligence, differences, comparison, types of AI, Weak AI, AGI, intelligent systems, capabilities, applications, development",
+        "rewritten_query": "[STUB] LLM response",
         "top_k": [
           {
-            "chunk_id": "1032",
-            "score": 0.6004,
-            "snippet": "==== Narrow vs. general AI ====\n{{Main|Weak artificial intelligence|Artificial general intelligence}}"
+            "chunk_id": "538",
+            "score": 1.471,
+            "snippet": "|url-status=live}}</ref> Taiwan aims to [[Nuclear power phase-out|phase out nuclear power]] by 2025.<ref name=\"Datacente"
           },
           {
-            "chunk_id": "1033",
-            "score": 0.6434,
-            "snippet": "AI researchers are divided as to whether to pursue the goals of artificial general intelligence and [[superintelligence]"
+            "chunk_id": "1206",
+            "score": 1.4765,
+            "snippet": "2023 |work=TechTalks |archive-date=22 November 2023 |archive-url=https://web.archive.org/web/20231122142948/https://bdte"
           }
         ],
-        "latency_ms": 12440.06
+        "latency_ms": 6.46
       },
       "diff": {
-        "overlap_ids": [
+        "overlap_ids": [],
+        "only_in_a": [
           "1032",
           "1033"
         ],
-        "only_in_a": [],
-        "only_in_b": []
+        "only_in_b": [
+          "1206",
+          "538"
+        ]
       }
     },
     {
@@ -148,28 +156,23 @@
             "snippet": "of AI researchers and cognitive scientists in the 1960s and was originally proposed by philosophers [[Jerry Fodor]] and "
           }
         ],
-        "latency_ms": 5.21
+        "latency_ms": 11.51
       },
       "strategy_b": {
-        "rewritten_query": "neural networks, artificial intelligence, machine learning, deep learning, algorithms, model training, pattern recognition, problem-solving, contributions, applications, neuroscience, future of AI",
+        "rewritten_query": "[STUB] LLM response",
         "top_k": [
           {
-            "chunk_id": "10",
-            "score": 0.8135,
-            "snippet": "and [[Machine perception|perception]], as well as support for [[robotics]].{{Efn|name=\"Problems of AI\"}} To reach these "
+            "chunk_id": "538",
+            "score": 1.471,
+            "snippet": "|url-status=live}}</ref> Taiwan aims to [[Nuclear power phase-out|phase out nuclear power]] by 2025.<ref name=\"Datacente"
           },
           {
-            "chunk_id": "2",
-            "score": 0.8198,
-            "snippet": "goals of AI research include learning, reasoning, knowledge representation, planning, natural language processing, and p"
-          },
-          {
-            "chunk_id": "11",
-            "score": 0.8709,
-            "snippet": "[[mathematical optimization]], [[formal logic]], [[artificial neural network]]s, and methods based on [[statistics]], [["
+            "chunk_id": "1206",
+            "score": 1.4765,
+            "snippet": "2023 |work=TechTalks |archive-date=22 November 2023 |archive-url=https://web.archive.org/web/20231122142948/https://bdte"
           }
         ],
-        "latency_ms": 11274.82
+        "latency_ms": 6.36
       },
       "diff": {
         "overlap_ids": [],
@@ -178,9 +181,8 @@
           "921"
         ],
         "only_in_b": [
-          "10",
-          "2",
-          "11"
+          "1206",
+          "538"
         ]
       }
     },
@@ -199,23 +201,23 @@
             "snippet": "AI has potential benefits and potential risks.<ref>{{Cite web |title=Ethics of Artificial Intelligence and Robotics |url"
           }
         ],
-        "latency_ms": 5.72
+        "latency_ms": 10.89
       },
       "strategy_b": {
-        "rewritten_query": "artificial intelligence, AI ethics, algorithmic bias, data privacy, transparency, accountability, fairness, machine learning, moral philosophy, social impact, unintended consequences, regulatory frameworks, policy implications, autonomy, human rights, safety standards, governance, long-term risks, harmful applications, societal effects",
+        "rewritten_query": "[STUB] LLM response",
         "top_k": [
           {
-            "chunk_id": "448",
-            "score": 0.5775,
-            "snippet": "artificial intelligence risks, benefits and policy imperatives |url=https://www.oecd.org/en/publications/assessing-poten"
+            "chunk_id": "538",
+            "score": 1.471,
+            "snippet": "|url-status=live}}</ref> Taiwan aims to [[Nuclear power phase-out|phase out nuclear power]] by 2025.<ref name=\"Datacente"
           },
           {
-            "chunk_id": "22",
-            "score": 0.578,
-            "snippet": "concerns]], [[AI aftermath scenarios|AI's long-term effects]], and [[Existential risk from artificial intelligence|poten"
+            "chunk_id": "1206",
+            "score": 1.4765,
+            "snippet": "2023 |work=TechTalks |archive-date=22 November 2023 |archive-url=https://web.archive.org/web/20231122142948/https://bdte"
           }
         ],
-        "latency_ms": 15577.95
+        "latency_ms": 7.22
       },
       "diff": {
         "overlap_ids": [],
@@ -224,8 +226,8 @@
           "443"
         ],
         "only_in_b": [
-          "22",
-          "448"
+          "1206",
+          "538"
         ]
       }
     }
